@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome-4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="css/config.css">
+        
+        <script src="js/jquery-1.12.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+		<title>Configuració Chang</title>
+	</head>
+	<body>
+        <nav class="navbar navbar-default navegador">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button> 
+                    <a class="navbar-brand" href="#">Chang</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                  <ul class="nav navbar-nav">
+                    <li class="active"><a href="xat.html">Xat general <span class="badge">999</span></a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Xats <span class="badge">15</span>
+                             <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                              <li><a href="#">Sr. Ñor <span class="badge">5</span></a></li>
+                              <li><a href="#">Dr. Trivial <span class="badge">10</span></a></li>
+                        </ul>
+                    </li>
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                    <li><a href="config.html"><i class="fa fa-cogs"></i> Configuració</a></li>
+                    <li><a href="#"><i class="fa fa-sign-out"></i> Sortir</a></li>
+                  </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pr-wrap">
+                        <div class="pass-reset">
+                            <label>
+                                Enter the email you signed up with</label>
+                            <input type="email" placeholder="Email" />
+                            <input type="submit" value="Submit" class="pass-reset-submit btn btn-success btn-sm" />
+                        </div>
+                    </div>
+                    <div class="wrap">
+                        <p class="form-title">
+                            Configuració</p>
+
+                            <div class="form config">
+                            	<input id="nouUsuari" class="bonic" placeholder="Nou usuari" autocomplete="off"/>
+                                <input id="nouNick" class="bonic" placeholder="Nou nick" autocomplete="off"/>
+                                <br><br>
+                                <input id="novaPass1" class="bonic" type="password" placeholder="Nova contrasenya"/>
+                                <input id="novaPass2" class="bonic" type="password" placeholder="Repeteix la nova contrasenya"/>
+                                <br><br>
+                                <input id="actualPass" class="bonic" type="password" placeholder="Contrasenya actual" required />
+                                <br><br>
+                                <input id="enviar" onclick="configClick()" type="submit" value="Enviar" class="btn btn-success btn-sm"/>
+
+                                <div class="missatge">
+                                    <p>Per a qualsevol modificació, has d'introduïr la teva contrasenya actual.</p>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</body>
+</html>

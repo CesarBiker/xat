@@ -1,0 +1,140 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+body
+{
+    /*background: url('http://farm3.staticflickr.com/2832/12303719364_c25cecdc28_b.jpg') fixed;*/
+    background-color: #688A67;
+    background-size: cover;
+    padding: 0;
+    margin: 0;
+}
+/* nav: */
+.navegador {
+    margin: 0;
+    border-radius: 0;
+}
+
+.contenidor {
+    height: calc(100vh - 52px); /* El valor de resta ha de ser el mateix al height de .navegador */
+    width: 100%;
+}
+
+.contenidor .esquerra {
+    height: inherit;
+    width: 200px;
+    float: left;
+    /*background-color: #607D8B;*/
+}
+.esquerra .panel {
+    height: 100%; 
+    margin:0; 
+    border-radius:0px;
+    overflow:auto;
+}
+.contenidor .dreta {
+    height: inherit;
+    margin-left: 200px;
+    min-width: 200px;
+    
+    background-color: #CFD8DC;
+}
+.contenidor .dreta .zonaEnviar {
+    height: 50px;
+}
+.contenidor .dreta .zonaEnviar .opcions {
+    height: inherit;
+    width: 50px;
+    float:left;
+    cursor: pointer;
+    border-top-width: 1px;
+    border-top-color: blue;
+}
+.contenidor .dreta .zonaEnviar .text {
+    height: inherit;
+    width: calc(100% - 50px - 200px); /* Calculs de .opcions i .boto */
+    float:left;
+}
+.contenidor .dreta .zonaEnviar .boto {
+    height: inherit;
+    width: 200px;
+    float:right;
+    
+}
+.centrat {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+.boto input[id="enviar"] {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    font-size: 130%;
+    font-weight: 500;
+    outline: 0;
+    cursor: pointer;
+    letter-spacing: 2px;
+}
+
+.zonaEnviar .text input[id="text"] {
+    width: 100%;
+    margin: 0;
+    padding: 12px 10px;
+    background: 0;
+    border: 0;
+    outline: 0;
+    font-size: 130%;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+    outline: 0;
+    /* border-radius: 10px; */
+    background-color: #688A67;
+}
+
+
+.contenidor .dreta .missatgesXat {
+    height: calc(100% - 50px);
+    width: 100%;
+    border-collapse:collapse;
+    display: table;
+}
+.missatgesXat .titol {
+    border-bottom: 1px solid gray;
+}
+.missatgesXat .titol h3 {
+    margin: 5px;
+    margin-left: 15px;
+}
+
+.missatgesXat .missatges {
+    height: 100%;
+    max-height: calc(100vh - 140px); /* Calc restant: navegador-zonaenviar-titol xat */
+    overflow:auto;
+}
+
+.missatges .missatge {
+    display : table-row;
+    vertical-align : bottom;
+    height : 1px;
+    width: 100%;
+   
+}
+.missatge .cont {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 5px;
+    border: 1px solid gray;
+}
+.missatge .cont p {
+    padding: 0;
+    margin: 0;
+}
+.missatge .cont .autor  {
+    text-decoration: underline;
+}
