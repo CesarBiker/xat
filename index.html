@@ -1,42 +1,133 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="css/login.css">
-		<title>Chang</title>
-	</head>
-	<body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="pr-wrap">
-                <div class="pass-reset">
-                    <label>
-                        Enter the email you signed up with</label>
-                    <input type="email" placeholder="Email" />
-                    <input type="submit" value="Submit" class="pass-reset-submit btn btn-success btn-sm" />
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/login.css">
+	<title>Chang</title>
+	<script type="text/javascript">
+		function onLoadMain() {
+			var l = getCookie("login");
+			if(l !== "") {
+				var enviar = new XMLHttpRequest();
+				enviar.onreadystatechange = function() {
+					if(enviar.readyState == 4 && enviar.status == 200) {
+						if(enviar.responseText.split(',')[0] === "true") {
+							redirigir();
+						} else {
+							missatge(enviar.responseText.split(',')[1]);
+						}
+					}
+				}
+				enviar.open("POST", "f.php", true);
+				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				enviar.send("l=&contrasenya="+l);
+
+			} else {
+				missatge("Si ja tens un compte, entra!<br>Sino registra't!");
+			}
+		}
+
+		function entrarClick() {
+			missatge("Entrant...");
+
+			var enviar = new XMLHttpRequest();
+			var usuari = document.getElementById("usuari").value;
+			var contrasenya = document.getElementById("contrasenya").value;
+
+			if(usuari !== "" && contrasenya !== "") {
+				console.log("eee");
+				enviar.onreadystatechange = function() {
+					if(enviar.readyState == 4 && enviar.status == 200) {
+						if(enviar.responseText.split(',')[0] === "true") {
+							//missatge(enviar.responseText.split(',')[1]);
+							redirigir();
+						} else {
+							missatge(enviar.responseText.split(',')[1]);
+						}
+					}
+				}
+				enviar.open("POST", "f.php", true);
+				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				enviar.send("l=&usuari=" + usuari + "&contrasenya=" + contrasenya);
+			} else {
+				missatge("Usuari i contrasenya no vàlids");
+			}
+		};
+
+		function registreClick() {
+			missatge("Registrant-se...");
+
+			var enviar = new XMLHttpRequest();
+			var usuari = document.getElementById("usuari").value;
+			var contrasenya = document.getElementById("contrasenya").value;
+
+			if(usuari !== "" && contrasenya !== "") {
+				enviar.onreadystatechange = function() {
+					if(enviar.readyState == 4 && enviar.status == 200) {
+						if(enviar.responseText.split(',')[0] === "true") {
+							//missatge(enviar.responseText.split(',')[1]);
+							redirigir();
+						} else {
+							missatge(enviar.responseText.split(',')[1]);
+						}
+					}
+				}
+				enviar.open("POST", "f.php", true);
+				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				enviar.send("r=&usuari=" + usuari + "&contrasenya=" + contrasenya);
+			} else {
+				missatge("Usuari i contrasenya no vàlids");
+			}
+		};
+
+		function redirigir() {
+			window.location = "/xat/xat.html";
+		}
+
+		function missatge(msg) {
+			document.getElementById("missatge").innerHTML = msg;
+		}
+
+		function getCookie(cname) {
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i < ca.length; i++) {
+				var c = ca[i];
+				while(c.charAt(0)==' ')
+					c = c.substring(1);
+				if(c.indexOf(name) == 0)
+					return c.substring(name.length,c.length);
+			}
+			return "";
+		}
+
+		function testEnter(event) {
+			if(event.key == "Enter") {
+				entrarClick();
+			}
+		}
+	</script>
+</head>
+<body onload="onLoadMain()" onkeypress="testEnter(event)">
+	<div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="wrap">
+                    <p class="form-title">
+                        Sign In</p>
+
+                        <div class="form login">
+                            <input id="usuari" placeholder="Usuari"/>
+                            <input id="contrasenya" type="password" placeholder="Contrasenya"/>
+                            <input id="entrar" onclick="entrarClick()" type="submit" value="Entrar" class="btn btn-success btn-sm"/>
+                            <input id="registre" onclick="registreClick()" type="submit" value="Registrar-te" class="btn btn-info btn-xs"/>
+                            <div id="missatge"/>
+                        </div>                    
                 </div>
             </div>
-            <div class="wrap">
-                <p class="form-title">
-                    Sign In</p>
-
-                    <div class="form login">
-                        <input id="usuari" placeholder="Usuari"/>
-                        <input id="contrasenya" type="password" placeholder="Contrasenya"/>
-                        <input id="entrar" onclick="entrarClick()" type="submit" value="Entrar" class="btn btn-success btn-sm"/>
-                        <input id="registre" onclick="registreClick()" type="submit" value="Registrar" class="btn btn-info btn-xs"/>
-
-                        <div class="missatge">
-                            asdasd
-                        </div>
-                    </div>
-            </div>
         </div>
+        <div class="posted-by">Xat Chang</div>
     </div>
-    <div class="posted-by">Xat Chang</div>
-</div>
-
-	</body>
+</body>
 </html>

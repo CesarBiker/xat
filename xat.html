@@ -5,6 +5,8 @@
 		<link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/font-awesome-4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="css/xat.css">
+        <script src="js/socket.io-1.4.5.js"></script>
+        <script src="js/controlXat.js"></script>
         
         <script src="js/jquery-1.12.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
@@ -42,7 +44,7 @@
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li><a href="config.html"><i class="fa fa-cogs"></i> Configuració</a></li>
-                    <li><a href="#"><i class="fa fa-sign-out"></i> Sortir</a></li>
+                    <li><a href="" onclick="desconectarse()"><i class="fa fa-sign-out"></i> Sortir</a></li>
                   </ul>
                 </div>
             </div>
@@ -68,12 +70,6 @@
                         <h3>Xat general</h3>
                     </div>
                     <div class="missatges" id="missatges">
-                        <div class="missatge">
-                            <div class="cont">
-                                <p class="autor">USUARI</p>
-                                <p class="text">CONTINGUT_MISSATGE</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="zonaEnviar"> 
