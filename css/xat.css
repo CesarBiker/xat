@@ -17,6 +17,11 @@ body
     border-radius: 0;
 }
 
+.icones {
+    width: 25px;
+    height: 25px;
+}
+
 .contenidor {
     height: calc(100vh - 52px); /* El valor de resta ha de ser el mateix al height de .navegador */
     width: 100%;
