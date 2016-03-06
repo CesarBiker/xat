@@ -5,9 +5,7 @@
 }
 body
 {
-    /*background: url('http://farm3.staticflickr.com/2832/12303719364_c25cecdc28_b.jpg') fixed;*/
-    background-color: #688A67;
-    background-size: cover;
+    background-color: #FFF;
     padding: 0;
     margin: 0;
 }
@@ -39,67 +37,19 @@ body
     border-radius:0px;
     overflow:auto;
 }
+.panel-xat {
+    height: calc(100vh - 102px);
+    margin:0; 
+    border-radius:0px;
+    overflow:auto;
+}
 .contenidor .dreta {
     height: inherit;
     margin-left: 200px;
-    min-width: 200px;
-    
-    background-color: #CFD8DC;
 }
 .contenidor .dreta .zonaEnviar {
     height: 50px;
 }
-.contenidor .dreta .zonaEnviar .opcions {
-    height: inherit;
-    width: 50px;
-    float:left;
-    cursor: pointer;
-    border-top-width: 1px;
-    border-top-color: blue;
-}
-.contenidor .dreta .zonaEnviar .text {
-    height: inherit;
-    width: calc(100% - 50px - 200px); /* Calculs de .opcions i .boto */
-    float:left;
-}
-.contenidor .dreta .zonaEnviar .boto {
-    height: inherit;
-    width: 200px;
-    float:right;
-    
-}
-.centrat {
-    text-align: center;
-    display: inline-block;
-    width: 100%;
-}
-.boto input[id="enviar"] {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    font-size: 130%;
-    font-weight: 500;
-    outline: 0;
-    cursor: pointer;
-    letter-spacing: 2px;
-}
-
-.zonaEnviar .text input[id="text"] {
-    width: 100%;
-    margin: 0;
-    padding: 12px 10px;
-    background: 0;
-    border: 0;
-    outline: 0;
-    font-size: 130%;
-    font-weight: 400;
-    letter-spacing: 1px;
-    color: #FFFFFF;
-    outline: 0;
-    /* border-radius: 10px; */
-    background-color: #688A67;
-}
-
 
 .contenidor .dreta .missatgesXat {
     height: calc(100% - 50px);
@@ -107,20 +57,15 @@ body
     border-collapse:collapse;
     display: table;
 }
-.missatgesXat .titol {
-    border-bottom: 1px solid gray;
-}
-.missatgesXat .titol h3 {
-    margin: 5px;
-    margin-left: 15px;
-}
 
-.missatgesXat .missatges {
+#missatges {
     height: 100%;
-    max-height: calc(100vh - 140px); /* Calc restant: navegador-zonaenviar-titol xat */
+    max-height: calc(100% - 39px); /* Calc restant: navegador-zonaenviar-titol xat */
     overflow:auto;
+    padding-bottom: 0;
+    max-width: 100%;
 }
-
+/* ANTIC 
 .missatges .missatge {
     display : table-row;
     vertical-align : bottom;
@@ -128,6 +73,7 @@ body
     width: 100%;
    
 }
+
 .missatge .cont {
     padding-left: 10px;
     padding-right: 10px;
@@ -140,6 +86,37 @@ body
     padding: 0;
     margin: 0;
 }
-.missatge .cont .autor  {
-    text-decoration: underline;
+*/
+.panel-missatge {
+    margin-bottom: 10px ;
+}
+
+.missatge {
+    padding-bottom: 0;
+    padding-top: 5px;
+    padding-right: 3px;
+}
+.autor, .text, .hora {
+    margin: 1px;
+}
+.autor  {
+    word-wrap: break-word;
+    max-width: calc(100vw - 270px);
+}
+.text {
+    word-wrap: break-word;
+    max-width: calc(100vw - 270px);
+
+}
+.hora {
+    text-align: right;
+    color: gray;
+    font-size: 0.8em;
+}
+
+.gran-50 {
+    height: 50px !important;
+}
+.no-bordes {
+    border-radius: 0 !important;
 }

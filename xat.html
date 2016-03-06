@@ -15,9 +15,38 @@
         <script src="js/socket.io-1.4.5.js"></script>
         <script src="js/controlXat.js"></script>
         
+        <!-- PASAR A controlXat.js-->
+        <script>
+        function afegirZero(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+        function test() {
+            var nom="Nick"
+            var text="Hola que tal hehe"
+            var d = new Date();
+            var hora=afegirZero(d.getHours())+":"+afegirZero(d.getMinutes());
+            for (var i = 1 - 1; i >= 0; i--) {
+                document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\">" +
+                    "<div class=\"panel-body missatge\">" +
+                        "<p class=\"autor\"><b>" + nom + "</b></p>" +
+                        "<p class=\"text\">" + text + "</p>" +
+                        "<p class=\"hora\">" + hora + "</p>" +
+                    "</div>" +
+                "</div>";
+            }
+            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
+        }
+        </script>
+        <!-- END BORRAR -->
+
 		<title>Chang</title>
 	</head>
 	<body onload="onLoadMain()">
+    
+        <!-- Navegador -->
         <nav class="navbar navbar-default navegador">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -50,37 +79,72 @@
             </div>
         </nav>
 
+
         <div class="contenidor">
+
+            <!-- Usuaris conectats -->
             <div class="esquerra">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-user"></i> Usuaris conectats</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="list-group">
+                        <div class="list-group" id="usuaris">
                           <button type="button" class="list-group-item">Sr. Ñor</button>
                           <button type="button" class="list-group-item">Dr. Trivial</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Estructura dels missatges -->
             <div class="dreta">
                 <div class="missatgesXat"> 
-                    <div class="titol">
-                        <h3>Xat general</h3>
-                    </div>
-                    <div class="missatges" id="missatges">
+                    <div class="panel panel-default panel-xat">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Xat general</h3>
+                        </div>
+                        <div  id="missatges" class="panel-body">
+                            
+                            <!-- Antiga estructura:
+                            <div class="missatge">
+                                <div class="cont">
+                                    <p class="autor">asd</p>
+                                    <p class="text">asdasd</p>
+                                </div>
+                            </div> 
+                            -->
+                            <!-- Nova estructura: 
+                            <div class="panel panel-default panel-missatge">
+                                <div class="panel-body missatge" >
+                                    <p class="autor"><b>Charly</b></p>
+                                    <p class="text">hehe</p>
+                                    <p class="hora">13:37</p>
+                                </div>
+                            </div>
+                            -->
+                        </div>
                     </div>
                 </div>
                 <div class="zonaEnviar"> 
-                    <div class="opcions"> <!-- Desplegable amb, pere exemple, Insertar... -->
-                        <i class="fa fa-chevron-up fa-3x centrat"></i>
-                    </div>
-                    <div class="text">
-                        <input id="text" onkeypress="testKey(event)" placeholder="Insereix el text que vulguis enviar" autocomplete="off"/>
-                    </div>
-                    <div class="boto">
-                        <input id="enviar" onclick="enviarMissatge()" type="submit" value="Enviar" class="btn btn-success btn-sm" />
+                    <div class="input-group input-group-lg gran-50">
+                        <div class="input-group-btn dropup gran-50">
+                            <button type="button" class="btn  btn-default dropdown-toggle gran-50 no-bordes" 
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-paperclip"></span>
+                            </button>
+                            <ul class="dropdown-menu ">
+                              <li class="disabled"><a href="#"><i class="fa fa-file"></i> Enviar arxiu</a></li>
+                              <li role="separator" class="divider"></li>
+                              <li class="disabled"><a href="#"><i class="fa fa-camera"></i> Enviar imatge</a></li>
+                              <li role="separator" class="divider"></li>
+                              <li class="disabled"><a href="#"><i class="fa fa-code"></i> Insertar codi</a></li>
+                            </ul>
+                        </div>
+                        <input id="text" onkeypress="testKey(event)" type="text" class="form-control gran-50" placeholder="Insereix el text que vulguis enviar" autocomplete="off">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default gran-50 no-bordes disabled" type="button"><i class="fa fa-smile-o"></i></button>
+                        </span>
                     </div>
                 </div>
             </div>
