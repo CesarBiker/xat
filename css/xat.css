@@ -34,13 +34,13 @@ body
 .esquerra .panel {
     height: 100%; 
     margin:0; 
-    border-radius:0px;
+    border-radius:0;
     overflow:auto;
 }
 .panel-xat {
     height: calc(100vh - 102px);
     margin:0; 
-    border-radius:0px;
+    border-radius:0;
     overflow:auto;
 }
 .contenidor .dreta {
@@ -119,4 +119,12 @@ body
 }
 .no-bordes {
     border-radius: 0 !important;
+}
+#codi-a-enviar {
+    height:calc(100vh - 330px); 
+    min-width: 100%;
+    max-width: 100%;
+}
+pre {
+    padding: 0;
 }
