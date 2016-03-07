@@ -4,6 +4,7 @@ var focus = false;
 var interval;
 var missatgesPerduts = 0;
 var notificationN;
+var bodyLoaded = false;
 
 function onLoadMain() {
 
@@ -34,6 +35,7 @@ function onLoadMain() {
         document.getElementById('missatgesPerduts').innerHTML = "";
     };
     demanarPermisNotis();
+    bodyLoaded = true;
 }
 
 function iniciarSocket() {
@@ -201,6 +203,8 @@ window.onfocus = function() {
     else
         document.getElementById('missatgesPerduts').innerHTML = "";
     missatgesPerduts = 0;
+    if(bodyLoaded)
+        document.getElementById('text').focus();
 };
 
 window.onblur = function() {
