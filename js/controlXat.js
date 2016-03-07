@@ -1,8 +1,53 @@
 var socket;
 var nom = "No conectat";
+var focus = false;
+var interval;
+
 function onLoadMain() {
+
+    var l = getCookie("login");
+    if(l !== "") {
+        var enviar = new XMLHttpRequest();
+        enviar.onreadystatechange = function() {
+            if(enviar.readyState == 4 && enviar.status == 200) {
+                if(enviar.responseText.split(',')[0] === "true") {
+                    nom = enviar.responseText.split(',')[1];
+                    //missatge("Hola " + nom + "!! Benvingut al club...");
+                    iniciarSocket();
+                } else {
+                    redirigir();
+                }
+                //window.location = "http://google.com/?q="+enviar.responseText;
+            }
+        }
+        enviar.open("POST", "f.php", true);
+        enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        enviar.send("l=&contrasenya="+l);
+
+    } else {
+        redirigir();
+        return;
+    }    
+}
+
+function iniciarSocket() {
     socket = io('http://192.168.3.9:3000');
+    socket.emit('nou usuari', {
+        nomUsuari : nom
+    });
+
+    socket.on('nou usuari', function(data) {
+        var usr_str = "";
+        for (var i = 0; i < data.persones.length; i++) {
+             usr_str += "<button type=\"button\" class=\"list-group-item\">" + data.persones[i] + "</button>\n";
+        }
+        document.getElementById('usuaris').innerHTML = usr_str;
+    });
+
     socket.on('msg', function(data) {
+        if(!focus) {
+            document.title = "NOU MISSATGE!";
+        }
         var inn = document.getElementById('missatges').innerHTML;
         console.log(data);
         document.getElementById('missatges').innerHTML += "<div class=\"missatge\">" +
@@ -13,34 +58,6 @@ function onLoadMain() {
                 "</div>";
         document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
     });
-
-    var l = getCookie("login");
-    if(l !== "") {
-        var enviar = new XMLHttpRequest();
-        enviar.onreadystatechange = function() {
-            if(enviar.readyState == 4 && enviar.status == 200) {
-                if(enviar.responseText.split(',')[0] === "true") {
-                    nom = enviar.responseText.split(',')[1];
-                    missatge("Hola " + nom + "!! Benvingut al club...");
-                } else {
-                    missatge("La teva sessió ha expirat, seras rediregit al login.");
-                    setTimeout(function() {
-                        window.location = "index.html";
-                    }, 3000);
-                }
-                //window.location = "http://google.com/?q="+enviar.responseText;
-            }
-        }
-        enviar.open("POST", "f.php", true);
-        enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        enviar.send("l=&contrasenya="+l);
-
-    } else {
-        missatge("La teva sessió ha expirat, seras rediregit al login.");
-        setTimeout(function() {
-            window.location = "index.html";
-        }, 1000);
-    }
 }
 
 function getCookie(cname) {
@@ -58,7 +75,11 @@ function getCookie(cname) {
 
 function desconectarse() {
     document.cookie = "login=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    window.location = "index.html";
+    redirigir();
+}
+
+function redirigir() {
+    window.location = "/xat/index.html";
 }
 
 function missatge(msg) {
@@ -67,6 +88,7 @@ function missatge(msg) {
 }
 
 function closeSocket() {
+    socket.emit('desconectar', { nomUsuari : nom });
     socket.close();
 }
 
@@ -80,7 +102,7 @@ function enviarMissatge() {
     var txt = document.getElementById('text').value;
     if(txt !== "") {
         socket.emit('msg', { msg : txt,
-                            nom : nom
+                             nom : nom
         });
         document.getElementById('text').value = "";
     } else {
@@ -91,6 +113,14 @@ function enviarMissatge() {
 
 window.onbeforeunload = function() {
     closeSocket();
+};
+
+window.onfocus = function() {
+    focus = true;
+};
+
+window.onblur = function() {
+    focus = false;
 };
 
 window.onunload = function() {
