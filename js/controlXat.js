@@ -48,15 +48,30 @@ function iniciarSocket() {
         if(!focus) {
             document.title = "NOU MISSATGE!";
         }
-        var inn = document.getElementById('missatges').innerHTML;
         console.log(data);
-        document.getElementById('missatges').innerHTML += "<div class=\"missatge\">" +
-                    "<div class=\"cont\">" +
-                        "<p class=\"autor\">" + data.nom + "</p>" +
-                        "<p class=\"text\">" + data.data + "</p>" +
-                    "</div>" +
-                "</div>";
-        document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
+        if(data.tipus === "text") {
+            document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\">" +
+                        "<div class=\"panel-body missatge\">" +
+                            "<p class=\"autor\"><b>" + data.nom + "</b></p>" +
+                            "<p class=\"text\">" + data.data + "</p>" +
+                            "<p class=\"hora\">" + data.hora + "</p>" +
+                        "</div>" +
+                    "</div>";
+            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
+        } else {
+            document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\">" +
+                "<div class=\"panel-body missatge\">" +
+                    "<p class=\"autor\"><b>" + data.nom + "</b></p>" +
+                    /*"<p class=\"text\"><pre><code class=\""+tipus+"\">" + text + "</code></pre></p>" + */
+                    "<pre><code class=\"" + data.tipus + "\">" + data.data + "</code></pre>" +
+                    "<p class=\"hora\">" + data.hora + "</p>" +
+                "</div>" +
+            "</div>";
+            
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        }
     });
 }
 
@@ -102,7 +117,8 @@ function enviarMissatge() {
     var txt = document.getElementById('text').value;
     if(txt !== "") {
         socket.emit('msg', { msg : txt,
-                             nom : nom
+                             nom : nom,
+                             tipus : "text"
         });
         document.getElementById('text').value = "";
     } else {
@@ -111,12 +127,26 @@ function enviarMissatge() {
 
 }
 
+function enviarCodi() {
+    var text = document.getElementById('codi-a-enviar').value;
+    var tipus = document.getElementById('tipus-codi').value;
+    if(text !== "" || tipus !== "") {
+        socket.emit('msg', { msg : text,
+                             nom : nom,
+                             tipus : tipus
+        });
+    } else {
+        alert("T'has deixat alguna cosa!");
+    }
+}
+
 window.onbeforeunload = function() {
     closeSocket();
 };
 
 window.onfocus = function() {
     focus = true;
+    document.title = "Chang";
 };
 
 window.onblur = function() {
