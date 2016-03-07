@@ -2,6 +2,8 @@ var socket;
 var nom = "No conectat";
 var focus = false;
 var interval;
+var missatgesPerduts = 0;
+var notificationN;
 
 function onLoadMain() {
 
@@ -27,7 +29,11 @@ function onLoadMain() {
     } else {
         redirigir();
         return;
-    }    
+    }
+    document.getElementById('text').onfocus = function() {
+        document.getElementById('missatgesPerduts').innerHTML = "";
+    };
+    demanarPermisNotis();
 }
 
 function iniciarSocket() {
@@ -46,7 +52,12 @@ function iniciarSocket() {
 
     socket.on('msg', function(data) {
         if(!focus) {
-            document.title = "NOU MISSATGE!";
+            missatgesPerduts++;
+            document.title = "(" + missatgesPerduts + ") NOU MISSATGE!";
+            if(data.tipus === "text")
+                enviarNotificacio(data.data, data.nom);
+            else
+                enviarNotificacio("Codi...", data.nom);
         }
         console.log(data);
         if(data.tipus === "text") {
@@ -71,6 +82,7 @@ function iniciarSocket() {
             $('pre code').each(function(i, block) {
                 hljs.highlightBlock(block);
             });
+            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
         }
     });
 }
@@ -135,9 +147,46 @@ function enviarCodi() {
                              nom : nom,
                              tipus : tipus
         });
-    } else {
-        alert("T'has deixat alguna cosa!");
+        document.getElementById('codi-a-enviar').value = '';
     }
+}
+
+function enviarNotificacio(text,nom) {
+    var options = {
+        body: text
+    }
+    if(typeof notificationN === 'undefined') {
+        notificationN = new Notification(nom + " diu:",options);    
+    } else {
+        setTimeout(function(){
+            notificationN.close();
+        }, 500);
+        notificationN = new Notification(nom + " diu:",options);
+    }
+}
+
+function demanarPermisNotis() {
+    if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+    }
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+        console.log("granted1");
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== 'denied') {
+        Notification.requestPermission(function (permission) {
+        // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                console.log("granted2");
+            }
+        });
+    }
+    // At last, if the user has denied notifications, and you 
+    // want to be respectful there is no need to bother them any more.
+    Notification.requestPermission();
 }
 
 window.onbeforeunload = function() {
@@ -147,6 +196,11 @@ window.onbeforeunload = function() {
 window.onfocus = function() {
     focus = true;
     document.title = "Chang";
+    if(missatgesPerduts > 0)
+        document.getElementById('missatgesPerduts').innerHTML = missatgesPerduts;
+    else
+        document.getElementById('missatgesPerduts').innerHTML = "";
+    missatgesPerduts = 0;
 };
 
 window.onblur = function() {
