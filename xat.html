@@ -64,12 +64,17 @@
             document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
 
         }
+
         </script>
+
         <!-- END BORRAR -->
 
 		<title>Chang</title>
 	</head>
+    <!-- 
 	<body onload="onLoadMain()">
+    -->
+    <body>
         <!-- Navegador -->
         <nav class="navbar navbar-default navegador">
             <div class="container-fluid">
@@ -129,7 +134,6 @@
                             <h3 class="panel-title">Xat general</h3>
                         </div>
                         <div  id="missatges" class="panel-body">
-                            
                             <!-- Antiga estructura:
                             <div class="missatge">
                                 <div class="cont">
@@ -167,7 +171,10 @@
                         </div>
                         <input id="text" onkeypress="testKey(event)" type="text" class="form-control gran-50" placeholder="Insereix el text que vulguis enviar" autocomplete="off">
                         <span class="input-group-btn">
-                            <button class="btn btn-default gran-50 no-bordes disabled" type="button"><i class="fa fa-smile-o"></i></button>
+                            <button class="btn btn-default gran-50 no-bordes pop-icones" type="button" data-container="body" data-toggle="popover" data-placement="top" data-original-title="" title="" >
+                            <i class="fa fa-smile-o"></i>
+                            </button>
+                              
                         </span>
                     </div>
                 </div>
@@ -203,6 +210,34 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Icones... -->
+
+            <div id="conjunt-icones" style="display: none; ">
+                <div><h2>Encara no! hehe</h2></div>
+            </div>  
         </div>
 	</body>
 </html>
+<!-- Per el popover de les icones (fa que no es tanqui mentre tinguem el hover dins el recuadre)
+i també per afegir el div de icones! -->
+<script type="text/javascript"> 
+
+$(".pop-icones").popover({ trigger: "manual" , html: true, animation:false,
+    content: function() {
+        return $('#conjunt-icones').html();
+    }}).on("mouseenter", function () {
+        var _this = this;
+        $(this).popover("show");
+        $(".popover").on("mouseleave", function () {
+            $(_this).popover('hide');
+        });
+    }).on("mouseleave", function () {
+        var _this = this;
+        setTimeout(function () {
+            if (!$(".popover:hover").length) {
+                $(_this).popover("hide");
+            }
+    }, 300);
+});
+</script>

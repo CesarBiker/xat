@@ -128,3 +128,8 @@ body
 pre {
     padding: 0;
 }
+/* (exemple per posicionar el popover de icones on vulguem)
+.popover {
+    top: 71px !important;
+    left: 379px !important;
+}*/
