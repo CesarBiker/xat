@@ -9,7 +9,6 @@ var lastMessage = "";
 var icones = ["smile", "roto2", "sad", "idk", "cry", "ram"];
 
 function onLoadMain() {
-
     var l = getCookie("login");
     if(l !== "") {
         var enviar = new XMLHttpRequest();
@@ -29,7 +28,7 @@ function onLoadMain() {
         enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         enviar.send("l=&contrasenya="+l);
 
-    } else {
+    } else { 
         redirigir();
         return;
     }
@@ -39,10 +38,12 @@ function onLoadMain() {
     demanarPermisNotis();
     bodyLoaded = true;
     for (var i = 0; i < icones.length; i++) {
+        
         document.getElementById('conjunt-icones').innerHTML += "<a onclick=afegirIconaText(\":"+icones[i]+":\") href=\"#\" data-toggle=\"tooltip\" data-placement=\"\" title=\":"+icones[i]+":\">" +
             "<img src=\"icons/"+icones[i]+".png\" alt=\":"+icones[i]+":\" class=\"seleccio icones\">" +
             "</a>";
     };
+
 }
 
 function iniciarSocket() {
@@ -253,3 +254,5 @@ window.onblur = function() {
 window.onunload = function() {
     closeSocket();
 };
+
+
