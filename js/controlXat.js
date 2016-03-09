@@ -5,6 +5,7 @@ var interval;
 var missatgesPerduts = 0;
 var notificationN;
 var bodyLoaded = false;
+var lastMessage = "";
 
 function onLoadMain() {
 
@@ -66,7 +67,7 @@ function iniciarSocket() {
             document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\">" +
                         "<div class=\"panel-body missatge\">" +
                             "<p class=\"autor\"><b>" + data.nom + "</b></p>" +
-                            "<p class=\"text\">" + data.data + "</p>" +
+                            "<p class=\"text\">" + comprovarIcones(data.data) + "</p>" +
                             "<p class=\"hora\">" + data.hora + "</p>" +
                         "</div>" +
                     "</div>";
@@ -75,7 +76,6 @@ function iniciarSocket() {
             document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\">" +
                 "<div class=\"panel-body missatge\">" +
                     "<p class=\"autor\"><b>" + data.nom + "</b></p>" +
-                    /*"<p class=\"text\"><pre><code class=\""+tipus+"\">" + text + "</code></pre></p>" + */
                     "<pre><code class=\"" + data.tipus + "\">" + data.data + "</code></pre>" +
                     "<p class=\"hora\">" + data.hora + "</p>" +
                 "</div>" +
@@ -111,6 +111,30 @@ function redirigir() {
     window.location = "/xat/index.html";
 }
 
+/*String.prototype.replaceAllOccurence = function(str1, str2, ignore) 
+{
+    return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
+};*/
+
+function comprovarIcones(msg) {
+    var icones = ["smile", "roto2", "sad", "idk", "cry"];
+    icones.forEach(function(s) {
+        if(msg.indexOf(":" + s + ":") > -1) {
+            msg = msg.replace(new RegExp(':' + s + ':', 'g'), "<img src=\"icons/" + s + ".png\" class='icones'/>");
+        }
+    });    
+    return comprovarLink(msg);
+}
+
+function comprovarLink(msg) {
+    if(msg.indexOf('http') > -1) {
+        msg = msg.replace(/(https?:\/\/[^\s]+)/g, function(url) {
+            return "<a href=\"" + url + "\">" + url + "</a>";
+        });
+    }
+    return msg;
+}
+
 function missatge(msg) {
     //document.getElementById("missatge").innerHTML = msg;
     console.log("Debug: " + msg);
@@ -125,6 +149,9 @@ function testKey(event) {
     if(event.key == "Enter") {
         enviarMissatge();
     }
+    if(event.key == 38) {
+        document.getElementById('text').value = lastMessage;
+    }
 }
 
 function enviarMissatge() {
@@ -135,6 +162,7 @@ function enviarMissatge() {
                              tipus : "text"
         });
         document.getElementById('text').value = "";
+        lastMessage = txt;
     } else {
         alert('No has escrit res!');
     }
