@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/login.css">
+
 	<title>Chang</title>
 	<script type="text/javascript">
 		function onLoadMain() {
@@ -24,12 +25,12 @@
 				enviar.send("l=&contrasenya="+l);
 
 			} else {
-				missatge("Si ja tens un compte, entra!<br>Sino registra't!");
+				nouMissatge('info', "Si ja tens un compte, <b>entra</b>! Sino <b>registra't</b>!");
 			}
 		}
 
 		function entrarClick() {
-			missatge("Entrant...");
+			nouMissatge('info', "Entrant...");
 
 			var enviar = new XMLHttpRequest();
 			var usuari = document.getElementById("usuari").value;
@@ -51,12 +52,12 @@
 				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				enviar.send("l=&usuari=" + usuari + "&contrasenya=" + contrasenya);
 			} else {
-				missatge("Usuari i contrasenya no vàlids");
+				nouMissatge('danger', "<b>Error:</b> Usuari i contrasenya no vàlids");
 			}
 		};
 
 		function registreClick() {
-			missatge("Registrant-se...");
+			nouMissatge('info', "Registrant-se...");
 
 			var enviar = new XMLHttpRequest();
 			var usuari = document.getElementById("usuari").value;
@@ -77,17 +78,22 @@
 				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				enviar.send("r=&usuari=" + usuari + "&contrasenya=" + contrasenya);
 			} else {
-				missatge("Usuari i contrasenya no vàlids");
+				nouMissatge('danger', "<b>Error:</b> Usuari i contrasenya no vàlids");
 			}
 		};
 
 		function redirigir() {
 			window.location = "/xat/xat.html";
 		}
-
-		function missatge(msg) {
-			document.getElementById("missatge").innerHTML = msg;
-		}
+		
+		function missatge(msg) { /* El conservo perque ens adaptem, pero s'ha de substituir per nouMissatge! */
+			nouMissatge('info', msg)
+		} 
+		function nouMissatge(tipus, missatge) { /* tipus: info, success, danger */
+			var msg = document.getElementById("msg-info");
+			msg.className = "alert alert-"+tipus;
+			msg.innerHTML = missatge;
+	    }
 
 		function getCookie(cname) {
 			var name = cname + "=";
@@ -114,20 +120,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="wrap">
-                    <p class="form-title">
-                        Sign In</p>
-
-                        <div class="form login">
-                            <input id="usuari" placeholder="Usuari"/>
-                            <input id="contrasenya" type="password" placeholder="Contrasenya"/>
-                            <input id="entrar" onclick="entrarClick()" type="submit" value="Entrar" class="btn btn-success btn-sm"/>
-                            <input id="registre" onclick="registreClick()" type="submit" value="Registrar-te" class="btn btn-info btn-xs"/>
-                            <div id="missatge"/>
-                        </div>                    
+                    <div class="form">
+                    	<h1>Xat Chang</h1>
+                    	<input id="usuari" type="text" class="form-control" placeholder="Usuari">
+                    	<input id="contrasenya" class="form-control" placeholder="Contrasenya" type="password">
+                    	<button id="entrar" onclick="entrarClick()" type="button" class="btn btn-success estil-boto">Entrar</button>
+                    	<button id="registre" onclick="registreClick()" type="button" class="btn btn-primary estil-boto">Registrar-te</button>
+                    	<div id="msg-info" class="alert alert-info" role="alert"></div>
+                    </div>                    
                 </div>
             </div>
         </div>
-        <div class="posted-by">Xat Chang</div>
     </div>
 </body>
 </html>

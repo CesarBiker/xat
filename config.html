@@ -51,7 +51,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="wrap">
-                        <div class="form config">
+                        <div class="form">
                             <input id="nou-nick" type="text" class="form-control" aria-label="..." placeholder="Nou nick" autocomplete="off">
                             <input type='text' id="paleta-colors"/>
                             <input id="nova-pass1" class="form-control" aria-label="..." placeholder="Nova contrasenya" type="password" autocomplete="off" >
@@ -105,14 +105,12 @@
         var color=$('#paleta-colors').val();
 
         /* Quan estigui tot be... */
-        nouMsgInfo('success', '<b>Enhorabona:</b> Tots els canvis s\'han guardat correctament.');
+        nouMsgInfo('success', '<b>Enhorabona:</b> correcte, però encara no funciona el sistema de configuració.');
     }
     function nouMsgInfo(tipus, missatge) { /* tipus: info, success, danger */
-        $("#msg-info").removeClass("alert-info");
-        $("#msg-info").removeClass("alert-success");
-        $("#msg-info").removeClass("alert-danger");
-        $("#msg-info").addClass("alert-"+tipus);
-        $("#msg-info").html(missatge);
+        var msg = document.getElementById("msg-info");
+        msg.className = "alert alert-"+tipus;
+        msg.innerHTML = missatge;
     }
     </script>
 </html>
