@@ -8,7 +8,11 @@
         
         <script src="js/jquery-1.12.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-		<title>Configuració Chang</title>
+
+        <script src="js/spectrum.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/spectrum.css">
+
+		<title>Chang - Configuració</title>
 	</head>
 	<body>
         <nav class="navbar navbar-default navegador">
@@ -47,25 +51,68 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="wrap">
-                        <p class="form-title">Configuració</p>
-                            <div class="form config">
-                            	<input id="nouUsuari" class="bonic" placeholder="Nou usuari" autocomplete="off"/>
-                                <input id="nouNick" class="bonic" placeholder="Nou nick" autocomplete="off"/>
-                                <br><br>
-                                <input id="novaPass1" class="bonic" type="password" placeholder="Nova contrasenya"/>
-                                <input id="novaPass2" class="bonic" type="password" placeholder="Repeteix la nova contrasenya"/>
-                                <br><br>
-                                <input id="actualPass" class="bonic" type="password" placeholder="Contrasenya actual" required />
-                                <br><br>
-                                <input id="enviar" onclick="configClick()" type="submit" value="Enviar" class="btn btn-success btn-sm"/>
+                        <div class="form config">
+                            <input id="nou-nick" type="text" class="form-control" aria-label="..." placeholder="Nou nick" autocomplete="off">
+                            <input type='text' id="paleta-colors"/>
+                            <input id="nova-pass1" class="form-control" aria-label="..." placeholder="Nova contrasenya" type="password" autocomplete="off" >
+                            <input id="nova-pass2" class="form-control" aria-label="..." placeholder="Repeteix la contrasenya" type="password" autocomplete="off" >
+                            
+                            <input id="actual-pass" class="form-control" aria-label="..." placeholder="Contrasenya actual" type="password" autocomplete="off" required>
 
-                                <div class="missatge">
-                                    <p>Per a qualsevol modificació, has d'introduïr la teva contrasenya actual.</p>
-                                </div>
-                            </div>
+                            <!-- <input id="enviar" onclick="configClick()" type="submit" value="Enviar" class="btn btn-success btn-sm"/>-->
+                            <button id="enviar" onclick="configClick()" type="button" class="btn btn-success guardar-canvis">Guardar canvis</button>
+                            <div id="msg-info" class="alert alert-info" role="alert">Per a quelsevol modificació has d'introduïr la teva contrasenya actual</div>
+                            <!--
+                            <div class="alert alert-success" role="alert"><b>Success:</b> Els canvis s'han actualitzat correctament</div>
+                            <div class="alert alert-danger" role="alert"><b>Error:</b> aquest nick ja existeix</div> -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 	</body>
+    <script type="text/javascript">
+    $("#paleta-colors").spectrum({
+        color: "#555",    
+        showPaletteOnly: true,
+        replacerClassName: 'form-control boto-paleta-fons',
+        change: function(color) {
+            $("#nou-nick").css('color', color),
+            $("#nou-nick").css('border-color', color)
+        },
+        palette: [
+            ["#A50000", "#FF0000","#FF4000","#FF8000","#80FF00","#40FF00","#00FF00",
+            "#00FF80","#00FFBF","#00FFFF","#00BFFF","#0080FF","#0040FF","#0000FF", "#4000FF", "#035462", "#5F7CFF",
+            "#8A60FF", "#33007F", "#FF75FA", "#5B0047","#FF3A57", "#E42B00", "#FF9200", "#BF9700", "#80B900", "#9CE000",
+            "#349E5B",
+            "#8000FF", "#740066", "#BF00FF", "#FF00FF", "#FF0080", "#FF0040", "#555", "#000000"]
+        ]
+    });
+    function configClick() {
+        var actualPass=$('#actual-pass').val();
+        if (actualPass=='') {
+            nouMsgInfo('danger', '<b>Error:</b> Escriu la teva contrasenya actual');
+            $('#actual-pass').focus();
+            return false;
+        }
+        var novaPass1=$('#nova-pass1').val();
+        var novaPass2=$('#nova-pass2').val();
+        if (novaPass1!=novaPass2) { /* També ho agafa si deixa els dos en blanc i per tant no es vol canviar*/
+            nouMsgInfo('danger', '<b>Error:</b> Has d\'escriure la nova contrasenya dos cops iguals!');
+            return false;
+        };
+        var nouNick=$('#nou-nick').val();
+        var color=$('#paleta-colors').val();
+
+        /* Quan estigui tot be... */
+        nouMsgInfo('success', '<b>Enhorabona:</b> Tots els canvis s\'han guardat correctament.');
+    }
+    function nouMsgInfo(tipus, missatge) { /* tipus: info, success, danger */
+        $("#msg-info").removeClass("alert-info");
+        $("#msg-info").removeClass("alert-success");
+        $("#msg-info").removeClass("alert-danger");
+        $("#msg-info").addClass("alert-"+tipus);
+        $("#msg-info").html(missatge);
+    }
+    </script>
 </html>
