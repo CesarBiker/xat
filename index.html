@@ -19,7 +19,7 @@
 							missatge(enviar.responseText.split(',')[1]);
 						}
 					}
-				}
+				};
 				enviar.open("POST", "f.php", true);
 				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				enviar.send("l=&contrasenya="+l);
@@ -44,15 +44,15 @@
 							//missatge(enviar.responseText.split(',')[1]);
 							redirigir();
 						} else {
-							missatge(enviar.responseText.split(',')[1]);
+							nouMissatge('danger',enviar.responseText.split(',')[1]);
 						}
 					}
-				}
+				};
 				enviar.open("POST", "f.php", true);
 				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				enviar.send("l=&usuari=" + usuari + "&contrasenya=" + contrasenya);
 			} else {
-				nouMissatge('danger', "<b>Error:</b> Usuari i contrasenya no vàlids");
+				nouMissatge('danger', "Usuari i contrasenya no vàlids");
 			}
 		};
 
@@ -70,10 +70,10 @@
 							//missatge(enviar.responseText.split(',')[1]);
 							redirigir();
 						} else {
-							missatge(enviar.responseText.split(',')[1]);
+							nouMissatge('danger',enviar.responseText.split(',')[1]);
 						}
 					}
-				}
+				};
 				enviar.open("POST", "f.php", true);
 				enviar.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				enviar.send("r=&usuari=" + usuari + "&contrasenya=" + contrasenya);
@@ -92,7 +92,10 @@
 		function nouMissatge(tipus, missatge) { /* tipus: info, success, danger */
 			var msg = document.getElementById("msg-info");
 			msg.className = "alert alert-"+tipus;
-			msg.innerHTML = missatge;
+			if(tipus === "danger")
+				msg.innerHTML = "<b>Error:</b> " + missatge;
+			else
+				msg.innerHTML = missatge;
 	    }
 
 		function getCookie(cname) {
