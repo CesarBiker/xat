@@ -20,8 +20,8 @@
 
 		<title>Chang</title>
 	</head>
-	<body onload="onLoadMain()">
-    <!-- <body> -->
+	<!-- <body onload="onLoadMain()"> -->
+     <body> 
         <!-- Navegador -->
         <nav class="navbar navbar-default navegador">
             <div class="container-fluid">
@@ -118,7 +118,7 @@
                         </div>
                         <input id="text" onkeypress="testKey(event)" type="text" class="form-control gran-50" placeholder="Insereix el text que vulguis enviar" autocomplete="off">
                         <span class="input-group-btn">
-                            <button class="btn btn-default gran-50 no-bordes pop-icones" type="button" data-container="body" data-toggle="popover" data-placement="top" data-original-title="" title="" >
+                            <button class="btn btn-default gran-50 no-bordes pop-icones" type="button" data-container="body" data-toggle="popover" data-placement="top" data-original-title="" title="" >   
                             <i class="fa fa-smile-o"></i>
                             </button>
                               
@@ -160,8 +160,10 @@
             <!-- Icones... -->
 
             <div id="conjunt-icones" style="display: none; ">
-                <div><h2>Encara no! hehe</h2></div>
-            </div>  
+                <a href="#" data-toggle="tooltip" data-placement="" title=":roto2:">
+                    <img src="icons/roto2.png" alt="roto2" class="seleccio icones">
+                </a>
+            </div>
         </div>
 	</body>
 </html>
@@ -178,6 +180,7 @@ $(".pop-icones").popover({ trigger: "manual" , html: true, animation:false,
         $(".popover").on("mouseleave", function () {
             $(_this).popover('hide');
         });
+        $('[data-toggle="tooltip"]').tooltip();
     }).on("mouseleave", function () {
         var _this = this;
         setTimeout(function () {
@@ -185,5 +188,9 @@ $(".pop-icones").popover({ trigger: "manual" , html: true, animation:false,
                 $(_this).popover("hide");
             }
     }, 300);
+});
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
