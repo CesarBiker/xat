@@ -137,3 +137,7 @@ pre {
 .popover .arrow {
     display:none !important;
 }
+
+.tooltip {
+    position: fixed;
+}

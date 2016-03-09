@@ -6,6 +6,7 @@ var missatgesPerduts = 0;
 var notificationN;
 var bodyLoaded = false;
 var lastMessage = "";
+var icones = ["smile", "roto2", "sad", "idk", "cry", "ram"];
 
 function onLoadMain() {
 
@@ -37,6 +38,11 @@ function onLoadMain() {
     };
     demanarPermisNotis();
     bodyLoaded = true;
+    for (var i = 0; i < icones.length; i++) {
+        document.getElementById('conjunt-icones').innerHTML += "<a onclick=afegirIconaText(\":"+icones[i]+":\") href=\"#\" data-toggle=\"tooltip\" data-placement=\"\" title=\":"+icones[i]+":\">" +
+            "<img src=\"icons/"+icones[i]+".png\" alt=\":"+icones[i]+":\" class=\"seleccio icones\">" +
+            "</a>";
+    };
 }
 
 function iniciarSocket() {
@@ -118,13 +124,7 @@ function redirigir() {
     window.location = "/xat/index.html";
 }
 
-/*String.prototype.replaceAllOccurence = function(str1, str2, ignore) 
-{
-    return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
-};*/
-
 function comprovarIcones(msg) {
-    var icones = ["smile", "roto2", "sad", "idk", "cry", "ram"];
     icones.forEach(function(s) {
         if(msg.indexOf(":" + s + ":") > -1) {
             msg = msg.replace(new RegExp(':' + s + ':', 'g'), "<img src=\"icons/" + s + ".png\" class='icones'/>");
@@ -224,6 +224,10 @@ function demanarPermisNotis() {
     // At last, if the user has denied notifications, and you 
     // want to be respectful there is no need to bother them any more.
     Notification.requestPermission();
+}
+
+function afegirIconaText(icona) {
+    document.getElementById('text').value = document.getElementById('text').value + icona;
 }
 
 window.onbeforeunload = function() {
