@@ -47,6 +47,8 @@ function iniciarSocket() {
 
     socket.on('nou usuari', function(data) {
         var usr_str = "";
+        console.log("Usuaris:");
+        console.log(data);
         for (var i = 0; i < data.persones.length; i++) {
              usr_str += "<button type=\"button\" class=\"list-group-item\">" + data.persones[i] + "</button>\n";
         }
@@ -87,6 +89,11 @@ function iniciarSocket() {
             document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
         }
     });
+
+    socket.on('reset', function() {
+        console.log('reseeet');
+        location.reload(true);
+    });
 }
 
 function getCookie(cname) {
@@ -117,7 +124,7 @@ function redirigir() {
 };*/
 
 function comprovarIcones(msg) {
-    var icones = ["smile", "roto2", "sad", "idk", "cry"];
+    var icones = ["smile", "roto2", "sad", "idk", "cry", "ram"];
     icones.forEach(function(s) {
         if(msg.indexOf(":" + s + ":") > -1) {
             msg = msg.replace(new RegExp(':' + s + ':', 'g'), "<img src=\"icons/" + s + ".png\" class='icones'/>");
@@ -129,7 +136,7 @@ function comprovarIcones(msg) {
 function comprovarLink(msg) {
     if(msg.indexOf('http') > -1) {
         msg = msg.replace(/(https?:\/\/[^\s]+)/g, function(url) {
-            return "<a href=\"" + url + "\">" + url + "</a>";
+            return "<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>";
         });
     }
     return msg;

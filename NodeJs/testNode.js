@@ -7,19 +7,40 @@ var salaPrincipal = new SalaXat("Principal");
 function SalaXat(nom) {
 	this.nom = nom;
 	this.persones = [];
+	/*
+		{
+			nom : '',
+			cookie : ''
+		}
+	*/
+	this.numPersones = 0;
 	this.afegirPersona = function(nom) {
-		if(this.persones.indexOf(nom) == -1) {
-			this.persones.push(nom);
-			this.persones.sort();
+		var persObj = this.persones.filter(function(per) {
+			return per.nom === nom;
+		})[0];
+
+		if(typeof persObj === 'undefined') {
+			this.persones.push( { nom : nom } );
+			this.persones.sort(compare);
+			this.numPersones++;
 			return true;
 		}
 		return false;
 	};
 
 	this.borrarPersona = function(nom) {
-		var i = this.persones.indexOf(nom);
-		if(i != -1) {
-			this.persones.splice(i,1);//Borrar 1 element des de l'index trobat
+		var indexPer = this.persones.map(function(per, index) {
+			if(per.nom === nom)
+				return index;
+		}).filter(isFinite)[0];
+
+		var persObj = this.persones.filter(function(per) {
+			return per.nom === nom;
+		})[0];
+
+		if(typeof persObj !== 'undefined') {
+			this.persones.splice(indexPer,1);//Borrar 1 element des de l'index trobat
+			this.numPersones--;
 			return true;
 		}
 		return false;
@@ -27,12 +48,16 @@ function SalaXat(nom) {
 }
 
 function onConnection(socket) {
-	console.log('Nova conexió');
+	console.log('Nova conexió: ' + socket.id);
+	console.log(socket.request.connection.remoteAddress);
 
 	socket.on('nou usuari', function(data) {
 		console.log("Nou usuari :" + data.nomUsuari);
 		salaPrincipal.afegirPersona(data.nomUsuari);
-		servidor.emit('nou usuari', { persones : salaPrincipal.persones });
+		var perEnv = salaPrincipal.persones.map(function(obj) {
+			return obj.nom;
+		});
+		servidor.emit('nou usuari', { persones : perEnv });
 		console.log(salaPrincipal.persones);
 	});
 
@@ -40,7 +65,10 @@ function onConnection(socket) {
 		console.log(data.nomUsuari + " s'ha anat");
 		salaPrincipal.borrarPersona(data.nomUsuari);
 		console.log(salaPrincipal.persones);
-		servidor.emit('nou usuari', { persones : salaPrincipal.persones });
+		var perEnv = salaPrincipal.persones.map(function(obj) {
+			return obj.nom;
+		});
+		servidor.emit('nou usuari', { persones : perEnv });
 	});
 
 	socket.on('msg', function(data) {
@@ -56,6 +84,15 @@ function onConnection(socket) {
 		enviarMissatgeXatTots(escaped, data.nom, data.tipus);
 		
 		console.log(data);	
+	});
+
+	socket.on('reset', function(data) {
+		if(socket.request.connection.remoteAddress.indexOf('192.168.3.9')) {
+			servidor.emit('reset');
+			console.log('Enviat reset a clients');			
+		} else {
+			console.log('Intent de reset de: ' + socket.request.connection.remoteAddress);
+		}
 	});
 
 	/*socket.on('disconnect', function(){
@@ -93,4 +130,13 @@ function safe_tags(str) {
 
 function afegirZero(i) {
 	return i < 10 ? "0" + i : i;
+}
+
+function compare(a,b) {
+	if (a.nom < b.nom)
+		return -1;
+	else if (a.nom > b.nom)
+		return 1;
+	else 
+		return 0;
 }
