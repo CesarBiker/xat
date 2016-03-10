@@ -1,5 +1,6 @@
 var d = new Date();
 
+var fs = require("fs");
 var servidor = iniciarServidor(3000);
 
 var salaPrincipal = new SalaXat("Principal");
@@ -113,6 +114,7 @@ function enviarMissatgeXatTots(msg, nom, tipus, color) {
 				hora : hora,
 				color : color
 			});
+		escriureLog(msg);
 	} else {
 		console.log("Error al enviar missatge: servidor no definit.");
 	}
@@ -158,4 +160,13 @@ function compare(a,b) {
 		return 1;
 	else 
 		return 0;
+}
+
+function escriureLog(msg) {
+	fs.writeFile("/tmp/testNode.txt", msg, function(err) {
+		if(err) {
+			return console.log(err);
+		}
+		console.log("Escrit en el fitxer;");
+	});
 }

@@ -90,9 +90,9 @@ function iniciarSocket() {
                     "</div>";
             document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
         } else {
-            document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\">" +
+            document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:"+data.color+"\">" +
                 "<div class=\"panel-body missatge\">" +
-                    "<p class=\"autor\"><b>" + data.nom + "</b></p>" +
+                    "<p class=\"autor\" style=\"color:"+data.color+"\"><b>" + data.nom + "</b></p>" +
                     "<pre><code class=\"" + data.tipus + "\">" + data.data + "</code></pre>" +
                     "<p class=\"hora\">" + data.hora + "</p>" +
                 "</div>" +
