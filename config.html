@@ -109,8 +109,8 @@
         enviar.onreadystatechange = function() {
             if(enviar.readyState == 4 && enviar.status == 200) {
                 console.log(enviar.responseText);
-                if(enviar.responseText.split(',')[0] === true) {
-                    nouMsgInfo('success', '<b>Enhorabona:</b> ' + enviar.responseText);            
+                if(enviar.responseText.split(',')[0] === "true") {
+                    nouMsgInfo('success', '<b>Enhorabona:</b> ' + enviar.responseText.split(',')[1]);            
                 } else {
                     nouMsgInfo('danger', enviar.responseText.split(',')[1]);
                 }

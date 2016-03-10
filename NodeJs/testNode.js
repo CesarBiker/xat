@@ -58,6 +58,8 @@ function onConnection(socket) {
 			return obj.nom;
 		});
 		servidor.emit('nou usuari', { persones : perEnv });
+		console.log("Enviant missatge a " + socket.id);
+		enviarMissatgeXatId("Benvingut :D", "Servidor", "text", socket.id, "#00FF00");
 		console.log(salaPrincipal.persones);
 	});
 
@@ -81,7 +83,7 @@ function onConnection(socket) {
 				escaped = "<img style='max-width:calc(100vw - 250px)' src=\""+link+"\"/>";
 			}			
 		}
-		enviarMissatgeXatTots(escaped, data.nom, data.tipus);
+		enviarMissatgeXatTots(escaped, data.nom, data.tipus, data.color);
 		
 		console.log(data);	
 	});
@@ -100,7 +102,7 @@ function onConnection(socket) {
 	});*/
 }
 
-function enviarMissatgeXatTots(msg, nom, tipus) {
+function enviarMissatgeXatTots(msg, nom, tipus, color) {
 	var hora=afegirZero(d.getHours())+":"+afegirZero(d.getMinutes());
 
 	if(typeof servidor !== 'undefined') {
@@ -108,7 +110,24 @@ function enviarMissatgeXatTots(msg, nom, tipus) {
 				data : msg,
 				nom : nom,
 				tipus : tipus,
-				hora : hora
+				hora : hora,
+				color : color
+			});
+	} else {
+		console.log("Error al enviar missatge: servidor no definit.");
+	}
+}
+
+function enviarMissatgeXatId(msg, nom, tipus, id, color) {
+	var hora=afegirZero(d.getHours())+":"+afegirZero(d.getMinutes());
+
+	if(typeof servidor !== 'undefined') {
+		servidor.to(id).emit('msg', {
+				data : msg,
+				nom : nom,
+				tipus : tipus,
+				hora : hora,
+				color : color
 			});
 	} else {
 		console.log("Error al enviar missatge: servidor no definit.");
