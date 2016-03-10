@@ -59,12 +59,8 @@
                             
                             <input id="actual-pass" class="form-control" aria-label="..." placeholder="Contrasenya actual" type="password" autocomplete="off" required>
 
-                            <!-- <input id="enviar" onclick="configClick()" type="submit" value="Enviar" class="btn btn-success btn-sm"/>-->
                             <button id="enviar" onclick="configClick()" type="button" class="btn btn-success guardar-canvis">Guardar canvis</button>
                             <div id="msg-info" class="alert alert-info" role="alert">Per a quelsevol modificació has d'introduïr la teva contrasenya actual</div>
-                            <!--
-                            <div class="alert alert-success" role="alert"><b>Success:</b> Els canvis s'han actualitzat correctament</div>
-                            <div class="alert alert-danger" role="alert"><b>Error:</b> aquest nick ja existeix</div> -->
                         </div>
                     </div>
                 </div>
@@ -73,7 +69,7 @@
 	</body>
     <script type="text/javascript">
     $("#paleta-colors").spectrum({
-        color: "#555",    
+        color: "#555", 
         showPaletteOnly: true,
         replacerClassName: 'form-control boto-paleta-fons',
         change: function(color) {
