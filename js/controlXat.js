@@ -46,7 +46,7 @@ function onLoadMain() {
     } else { 
         redirigir();
         return;
-    }
+    } 
     document.getElementById('text').onfocus = function() {
         document.getElementById('missatgesPerduts').innerHTML = "";
     };
