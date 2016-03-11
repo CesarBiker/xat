@@ -15,13 +15,17 @@ function SalaXat(nom) {
 		}
 	*/
 	this.numPersones = 0;
-	this.afegirPersona = function(nom) {
+	this.afegirPersona = function(nom, cookie, id) {
 		var persObj = this.persones.filter(function(per) {
 			return per.nom === nom;
 		})[0];
 
 		if(typeof persObj === 'undefined') {
-			this.persones.push( { nom : nom } );
+			this.persones.push({ 
+				nom : nom,
+				cookie : cookie,
+				id : id
+			});
 			this.persones.sort(compare);
 			this.numPersones++;
 			return true;
@@ -54,13 +58,14 @@ function onConnection(socket) {
 
 	socket.on('nou usuari', function(data) {
 		console.log("Nou usuari :" + data.nomUsuari);
-		salaPrincipal.afegirPersona(data.nomUsuari);
+		console.log(data);
+		salaPrincipal.afegirPersona(data.nomUsuari, data.cookieU, socket.id);
 		var perEnv = salaPrincipal.persones.map(function(obj) {
 			return obj.nom;
 		});
 		servidor.emit('nou usuari', { persones : perEnv });
 		console.log("Enviant missatge a " + socket.id);
-		enviarMissatgeXatId("Benvingut :D", "Servidor", "text", socket.id, "#00FF00");
+		enviarMissatgeXatId("Benvingut :D", "Servidor", "text", socket.id, "#198A5A");
 		console.log(salaPrincipal.persones);
 	});
 
