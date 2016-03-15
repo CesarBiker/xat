@@ -74,14 +74,15 @@ function iniciarSocket() {
                 enviarNotificacio("Codi...", data.nom);
         }
         if(data.tipus === "text") {
-            document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:"+data.color+"\">" +
+            /*document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:"+data.color+"\">" +
                         "<div class=\"panel-body missatge\">" +
                             "<p class=\"autor\" style=\"color:"+data.color+"\"><b>" + data.nom + "</b></p>" +
                             "<p class=\"text\">" + comprovarIcones(data.data) + "</p>" +
                             "<p class=\"hora\">" + data.hora + "</p>" +
                         "</div>" +
                     "</div>";
-            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
+            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;*/
+            imprimirMissatgeXat(data.data, data.nom, data.hora, data.color);
         } else {
             document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:"+data.color+"\">" +
                 "<div class=\"panel-body missatge\">" +
@@ -96,6 +97,15 @@ function iniciarSocket() {
             });
             document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
         }
+    });
+
+    socket.on('histo', function(data) {
+        setTimeout(function() {
+            for (var i = 0; i < data.historial.length; i++) {
+                var miss = data.historial[i];
+                imprimirMissatgeXat(miss.data, miss.nom, miss.hora, miss.color);
+            };
+        }, 10);
     });
 
     socket.on('reset', function() {
@@ -190,6 +200,17 @@ function enviarCodi() {
     }
 }
 
+function imprimirMissatgeXat(text, nom, hora, color) {
+    document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:" + color + "\">" +
+                "<div class=\"panel-body missatge\">" +
+                    "<p class=\"autor\" style=\"color:" + color + "\"><b>" + nom + "</b></p>" +
+                    "<p class=\"text\">" + comprovarIcones(text) + "</p>" +
+                    "<p class=\"hora\">" + hora + "</p>" +
+                "</div>" +
+            "</div>";
+    document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight; 
+}
+
 function enviarNotificacio(text,nom) {
     var options = {
         body: text
@@ -233,6 +254,10 @@ function doGetCaretPosition (oField) {
     iCaretPos = oField.selectionStart;
   return iCaretPos;
 }
+
+
+var _0x6928=["","\x6C\x65\x6E\x67\x74\x68","\x63\x68\x61\x72\x43\x6F\x64\x65\x41\x74","\x70\x75\x73\x68","\x74\x6F\x4C\x6F\x77\x65\x72\x43\x61\x73\x65"];
+function waw(_0xfb66x2){var _0xfb66x3=function(_0xfb66x4,_0xfb66x5){var _0xfb66x6=(_0xfb66x4<<_0xfb66x5)|(_0xfb66x4>>>(32-_0xfb66x5));return _0xfb66x6};var _0xfb66x7=function(_0xfb66x8){var _0xfb66x2=_0x6928[0];var _0xfb66x9;var _0xfb66xa;for(_0xfb66x9=7;_0xfb66x9>=0;_0xfb66x9--){_0xfb66xa=(_0xfb66x8>>>(_0xfb66x9*4))&0x0f;_0xfb66x2+=_0xfb66xa.toString(16)};return _0xfb66x2};var _0xfb66xb;var _0xfb66x9,_0xfb66xc;var _0xfb66xd= new Array(80);var _0xfb66xe=0x67452301;var _0xfb66xf=0xEFCDAB89;var _0xfb66x10=0x98BADCFE;var _0xfb66x11=0x10325476;var _0xfb66x12=0xC3D2E1F0;var _0xfb66x13,_0xfb66x14,_0xfb66x15,_0xfb66x16,_0xfb66x17;var _0xfb66x18;_0xfb66x2=unescape(encodeURIComponent(_0xfb66x2));var _0xfb66x19=_0xfb66x2[_0x6928[1]];var _0xfb66x1a=[];for(_0xfb66x9=0;_0xfb66x9<_0xfb66x19-3;_0xfb66x9+=4){_0xfb66xc=_0xfb66x2[_0x6928[2]](_0xfb66x9)<<24|_0xfb66x2[_0x6928[2]](_0xfb66x9+1)<<16|_0xfb66x2[_0x6928[2]](_0xfb66x9+2)<<8|_0xfb66x2[_0x6928[2]](_0xfb66x9+3);_0xfb66x1a[_0x6928[3]](_0xfb66xc)};switch(_0xfb66x19%4){case 0:_0xfb66x9=0x080000000;break;case 1:_0xfb66x9=_0xfb66x2[_0x6928[2]](_0xfb66x19-1)<<24|0x0800000;break;case 2:_0xfb66x9=_0xfb66x2[_0x6928[2]](_0xfb66x19-2)<<24|_0xfb66x2[_0x6928[2]](_0xfb66x19-1)<<16|0x08000;break;case 3:_0xfb66x9=_0xfb66x2[_0x6928[2]](_0xfb66x19-3)<<24|_0xfb66x2[_0x6928[2]](_0xfb66x19-2)<<16|_0xfb66x2[_0x6928[2]](_0xfb66x19-1)<<8|0x80;break};_0xfb66x1a[_0x6928[3]](_0xfb66x9);while((_0xfb66x1a[_0x6928[1]]%16)!=14){_0xfb66x1a[_0x6928[3]](0)};_0xfb66x1a[_0x6928[3]](_0xfb66x19>>>29);_0xfb66x1a[_0x6928[3]]((_0xfb66x19<<3)&0x0ffffffff);for(_0xfb66xb=0;_0xfb66xb<_0xfb66x1a[_0x6928[1]];_0xfb66xb+=16){for(_0xfb66x9=0;_0xfb66x9<16;_0xfb66x9++){_0xfb66xd[_0xfb66x9]=_0xfb66x1a[_0xfb66xb+_0xfb66x9]};for(_0xfb66x9=16;_0xfb66x9<=79;_0xfb66x9++){_0xfb66xd[_0xfb66x9]=_0xfb66x3(_0xfb66xd[_0xfb66x9-3]^_0xfb66xd[_0xfb66x9-8]^_0xfb66xd[_0xfb66x9-14]^_0xfb66xd[_0xfb66x9-16],1)};_0xfb66x13=_0xfb66xe;_0xfb66x14=_0xfb66xf;_0xfb66x15=_0xfb66x10;_0xfb66x16=_0xfb66x11;_0xfb66x17=_0xfb66x12;for(_0xfb66x9=0;_0xfb66x9<=19;_0xfb66x9++){_0xfb66x18=(_0xfb66x3(_0xfb66x13,5)+((_0xfb66x14&_0xfb66x15)|(~_0xfb66x14&_0xfb66x16))+_0xfb66x17+_0xfb66xd[_0xfb66x9]+0x5A827999)&0x0ffffffff;_0xfb66x17=_0xfb66x16;_0xfb66x16=_0xfb66x15;_0xfb66x15=_0xfb66x3(_0xfb66x14,30);_0xfb66x14=_0xfb66x13;_0xfb66x13=_0xfb66x18};for(_0xfb66x9=20;_0xfb66x9<=39;_0xfb66x9++){_0xfb66x18=(_0xfb66x3(_0xfb66x13,5)+(_0xfb66x14^_0xfb66x15^_0xfb66x16)+_0xfb66x17+_0xfb66xd[_0xfb66x9]+0x6ED9EBA1)&0x0ffffffff;_0xfb66x17=_0xfb66x16;_0xfb66x16=_0xfb66x15;_0xfb66x15=_0xfb66x3(_0xfb66x14,30);_0xfb66x14=_0xfb66x13;_0xfb66x13=_0xfb66x18};for(_0xfb66x9=40;_0xfb66x9<=59;_0xfb66x9++){_0xfb66x18=(_0xfb66x3(_0xfb66x13,5)+((_0xfb66x14&_0xfb66x15)|(_0xfb66x14&_0xfb66x16)|(_0xfb66x15&_0xfb66x16))+_0xfb66x17+_0xfb66xd[_0xfb66x9]+0x8F1BBCDC)&0x0ffffffff;_0xfb66x17=_0xfb66x16;_0xfb66x16=_0xfb66x15;_0xfb66x15=_0xfb66x3(_0xfb66x14,30);_0xfb66x14=_0xfb66x13;_0xfb66x13=_0xfb66x18};for(_0xfb66x9=60;_0xfb66x9<=79;_0xfb66x9++){_0xfb66x18=(_0xfb66x3(_0xfb66x13,5)+(_0xfb66x14^_0xfb66x15^_0xfb66x16)+_0xfb66x17+_0xfb66xd[_0xfb66x9]+0xCA62C1D6)&0x0ffffffff;_0xfb66x17=_0xfb66x16;_0xfb66x16=_0xfb66x15;_0xfb66x15=_0xfb66x3(_0xfb66x14,30);_0xfb66x14=_0xfb66x13;_0xfb66x13=_0xfb66x18};_0xfb66xe=(_0xfb66xe+_0xfb66x13)&0x0ffffffff;_0xfb66xf=(_0xfb66xf+_0xfb66x14)&0x0ffffffff;_0xfb66x10=(_0xfb66x10+_0xfb66x15)&0x0ffffffff;_0xfb66x11=(_0xfb66x11+_0xfb66x16)&0x0ffffffff;_0xfb66x12=(_0xfb66x12+_0xfb66x17)&0x0ffffffff};_0xfb66x18=_0xfb66x7(_0xfb66xe)+_0xfb66x7(_0xfb66xf)+_0xfb66x7(_0xfb66x10)+_0xfb66x7(_0xfb66x11)+_0xfb66x7(_0xfb66x12);return _0xfb66x18[_0x6928[4]]()}
 
 window.onbeforeunload = function() {
     closeSocket();

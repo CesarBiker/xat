@@ -2,19 +2,18 @@ var d = new Date();
 
 var fs = require("fs");
 var servidor = iniciarServidor(3000);
+var fitxerDesc = obrirFitxer("historial.json");
 
 var salaPrincipal = new SalaXat("Principal");
+
+//TODO: fer queue per historial
 
 function SalaXat(nom) {
 	this.nom = nom;
 	this.persones = [];
-	/*
-		{
-			nom : '',
-			cookie : ''
-		}
-	*/
 	this.numPersones = 0;
+	this.logHistorial = [];
+	this.calNouHistorial = true;
 	this.afegirPersona = function(nom, cookie, id) {
 		var persObj = this.persones.filter(function(per) {
 			return per.nom === nom;
@@ -57,15 +56,30 @@ function onConnection(socket) {
 	console.log(socket.request.connection.remoteAddress);
 
 	socket.on('nou usuari', function(data) {
+		llegirHistorial();
 		console.log("Nou usuari :" + data.nomUsuari);
-		console.log(data);
+		//console.log(data);
 		salaPrincipal.afegirPersona(data.nomUsuari, data.cookieU, socket.id);
 		var perEnv = salaPrincipal.persones.map(function(obj) {
 			return obj.nom;
 		});
 		servidor.emit('nou usuari', { persones : perEnv });
 		console.log("Enviant missatge a " + socket.id);
-		enviarMissatgeXatId("Benvingut :D", "Servidor", "text", socket.id, "#198A5A");
+		enviarMissatgeXatId("Benvingut/da :D", "Servidor", "text", socket.id, "#198A5A");
+		if(salaPrincipal.calNouHistorial === true) {
+			var inter = setInterval(function() {
+				if(salaPrincipal.calNouHistorial === false) {
+					servidor.to(socket.id).emit('histo', {
+						historial : salaPrincipal.logHistorial
+					});
+					clearInterval(inter);
+				} 
+			},10);
+		} else {
+			servidor.to(socket.id).emit('histo', {
+				historial : salaPrincipal.logHistorial
+			});
+		}
 		console.log(salaPrincipal.persones);
 	});
 
@@ -90,8 +104,6 @@ function onConnection(socket) {
 			}			
 		}
 		enviarMissatgeXatTots(escaped, data.nom, data.tipus, data.color);
-		
-		console.log(data);	
 	});
 
 	socket.on('reset', function(data) {
@@ -119,7 +131,13 @@ function enviarMissatgeXatTots(msg, nom, tipus, color) {
 				hora : hora,
 				color : color
 			});
-		escriureLog(msg);
+		escriureHistorial({
+				data : msg,
+				nom : nom,
+				tipus : tipus,
+				hora : hora,
+				color : color
+			});
 	} else {
 		console.log("Error al enviar missatge: servidor no definit.");
 	}
@@ -150,6 +168,12 @@ function iniciarServidor(port) {
 	return _srv;
 }
 
+function obrirFitxer(fitxer) {
+	var t = fs.openSync(fitxer, "a+");
+	console.log(t);
+	return t;
+}
+
 function safe_tags(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') ;
 }
@@ -167,11 +191,39 @@ function compare(a,b) {
 		return 0;
 }
 
-function escriureLog(msg) {
-	fs.writeFile("/tmp/testNode.txt", msg, function(err) {
+function escriureHistorial(msg) {
+	var buff = new Buffer(JSON.stringify(msg) + "\n");
+	fs.write(fitxerDesc, buff, 0, buff.length, function(err, written, buffer) {
 		if(err) {
+			console.log("Error al escriure a l'historial:" + err);
 			return console.log(err);
 		}
-		console.log("Escrit en el fitxer;");
+		console.log("Escrit a l'historial " + written + " bytes.");
+		salaPrincipal.logHistorial.shift();
+		salaPrincipal.logHistorial.push(msg);
 	});
+	llegirHistorial();
+}
+
+function llegirHistorial() {
+	if(salaPrincipal.calNouHistorial === true) {
+		fs.stat("historial.json", function(err, stats) {
+			fs.createReadStream("historial.json", {
+				start: stats.size - 2000,
+				end: stats.size - 1
+			}).addListener("data", function(data) {
+				var linia = data.toString().split('\n');
+				console.log("Parsed:");
+				if(salaPrincipal.logHistorial.length === 0) {
+					console.log("Llegint...");
+					for (var i = 0; i < linia.length; i++) {
+						if(linia[i].substring(0,1) === "{") {
+							salaPrincipal.logHistorial.push(JSON.parse(linia[i]));
+						}
+					};
+				}
+				salaPrincipal.calNouHistorial = false;
+			})
+		});
+	}
 }
