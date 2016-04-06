@@ -9,6 +9,8 @@ var notificationN;
 var bodyLoaded = false;
 var lastMessage = "";
 var icones = ["1f31e","1f32c","1f385-1f3fc","1f3c3-1f3fc","1f3c5","1f3c6","1f3cb-1f3fc","1f3cd","1f3ce","1f42a","1f446-1f3fc","1f447-1f3fc","1f448-1f3fc","1f449-1f3fc","1f44a-1f3fc","1f44b-1f3fc","1f44c-1f3fc","1f44d-1f3fc","1f44e-1f3fc","1f44f-1f3fc","1f450-1f3fc","1f466-1f3fc","1f467-1f3fc","1f468-1f3fc","1f469-1f3fc","1f46e-1f3fc","1f471-1f3fc","1f47c-1f3fc","1f483-1f3fb","1f4a2","1f4a5","1f4a6","1f4a8","1f4a9","1f4aa-1f3fd","1f4b0","1f52a","1f575-1f3fc","1f590-1f3fc","1f595-1f3fc","1f596-1f3fc","1f5e1","1f600","1f601","1f602","1f603","1f604","1f605","1f606","1f607","1f608","1f609","1f60a","1f60b","1f60c","1f60d","1f60e","1f60f","1f610","1f611","1f612","1f613","1f614","1f615","1f616","1f617","1f618","1f619","1f61a","1f61b","1f61c","1f61d","1f61e","1f61f","1f620","1f621","1f622","1f623","1f624","1f625","1f626","1f627","1f628","1f629","1f62a","1f62b","1f62c","1f62d","1f62e","1f62f","1f630","1f631","1f632","1f633","1f634","1f635","1f636","1f637","1f641","1f642","1f643","1f644","1f64a","1f64b-1f3fc","1f64c-1f3fc","1f64f-1f3fc","1f6a3-1f3fc","1f6b6-1f3fc","1f6c0-1f3fd","1f6cf","1f6e9","1f910","1f911","1f912","1f913","1f914","1f915","1f917","1f918-1f3fd","2639","263a","270a-1f3fc","270b-1f3fc","270c-1f3fc","270d-1f3fc"];
+var typing = false;
+var typeTimeout;
 
 function onLoadMain() {
     l = getCookie("login");
@@ -20,10 +22,28 @@ function onLoadMain() {
                     nom = enviar.responseText.split(',')[1];
                     color = enviar.responseText.split(',')[2];
                     iniciarSocket();
+                    //jQuery
+                    $("#paleta-colors").spectrum({
+                        color: color, // Aquí es fica el color per defecte. Falta ficar el actual del user.
+                        showPaletteOnly: true,
+                        replacerClassName: 'form-control boto-paleta-fons',
+                        change: function(color) {
+                            $("#nou-nick").css('color', color),
+                            $("#nou-nick").css('border-color', color)
+                        },
+                        palette: [
+                            ["#A50000", "#FF0000","#FF4000","#FF8000","#80FF00","#40FF00","#00FF00",
+                            "#00FF80","#00FFBF","#00FFFF","#00BFFF","#0080FF","#0040FF","#0000FF", "#4000FF", "#035462", "#5F7CFF",
+                            "#8A60FF", "#33007F", "#FF75FA", "#5B0047","#FF3A57", "#E42B00", "#FF9200", "#BF9700", "#80B900", "#9CE000",
+                            "#349E5B",
+                            "#8000FF", "#740066", "#BF00FF", "#FF00FF", "#FF0080", "#FF0040", "#555", "#000000"]
+                        ]
+                    });
+                    //fi jQuery 
                     setTimeout(function() {
                         var str = "";
                         for (var i = 0; i < icones.length; i++) {
-                            str += "<a onclick=afegirIconaText(\":"+icones[i]+":\") href=\"#\" data-toggle=\"tooltip\" data-placement=\"\" title=\":"+icones[i]+":\">" +
+                            str += "<a onclick=afegirIconaText(\":"+icones[i]+":\") href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\":"+icones[i]+":\">" +
                                 "<img src=\"SeleccioIcons/"+icones[i]+".png\" alt=\":"+icones[i]+":\" class=\"seleccio icones\">" +
                                 "</a>";
                         }
@@ -46,6 +66,7 @@ function onLoadMain() {
         document.getElementById('missatgesPerduts').innerHTML = "";
     };
     demanarPermisNotis();
+
     bodyLoaded = true;
 }
 
@@ -59,7 +80,7 @@ function iniciarSocket() {
     socket.on('nou usuari', function(data) {
         var usr_str = "";
         for (var i = 0; i < data.persones.length; i++) {
-             usr_str += "<button type=\"button\" class=\"list-group-item\">" + data.persones[i] + "</button>\n";
+             usr_str += "<button onclick=\"clickUsuari(this.id)\" type=\"button\" class=\"list-group-item\" id=\"" + data.persones[i] + "\">" + data.persones[i] + "</button>\n";
         }
         document.getElementById('usuaris').innerHTML = usr_str;
     });
@@ -73,39 +94,24 @@ function iniciarSocket() {
             else
                 enviarNotificacio("Codi...", data.nom);
         }
-        if(data.tipus === "text") {
-            /*document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:"+data.color+"\">" +
-                        "<div class=\"panel-body missatge\">" +
-                            "<p class=\"autor\" style=\"color:"+data.color+"\"><b>" + data.nom + "</b></p>" +
-                            "<p class=\"text\">" + comprovarIcones(data.data) + "</p>" +
-                            "<p class=\"hora\">" + data.hora + "</p>" +
-                        "</div>" +
-                    "</div>";
-            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;*/
-            imprimirMissatgeXat(data.data, data.nom, data.hora, data.color);
-        } else {
-            document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:"+data.color+"\">" +
-                "<div class=\"panel-body missatge\">" +
-                    "<p class=\"autor\" style=\"color:"+data.color+"\"><b>" + data.nom + "</b></p>" +
-                    "<pre><code class=\"" + data.tipus + "\">" + data.data + "</code></pre>" +
-                    "<p class=\"hora\">" + data.hora + "</p>" +
-                "</div>" +
-            "</div>";
-            
-            $('pre code').each(function(i, block) {
-                hljs.highlightBlock(block);
-            });
-            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
-        }
+        imprimirMissatgeXat(data.data, data.nom, data.hora, data.color, data.tipus);
     });
 
     socket.on('histo', function(data) {
         setTimeout(function() {
             for (var i = 0; i < data.historial.length; i++) {
                 var miss = data.historial[i];
-                imprimirMissatgeXat(miss.data, miss.nom, miss.hora, miss.color);
+                imprimirMissatgeXat(miss.data, miss.nom, miss.hora, miss.color, miss.tipus);
             };
         }, 10);
+    });
+
+    socket.on('typing', function(data) {
+        console.log(data);
+        if(data.typing)
+            document.getElementById(data.nom).innerHTML = data.nom + " escribinit...";
+        else
+            document.getElementById(data.nom).innerHTML = data.nom;            
     });
 
     socket.on('reset', function() {
@@ -145,7 +151,7 @@ function comprovarIcones(msg) {
 }
 
 function comprovarLink(msg) {
-    if(msg.indexOf('http') > -1) {
+    if(msg.indexOf('http') > -1 && !(msg.indexOf('max-width:calc') > -1)) {
         msg = msg.replace(/(https?:\/\/[^\s]+)/g, function(url) {
             return "<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>";
         });
@@ -166,9 +172,32 @@ function closeSocket() {
 function testKey(event) {
     if(event.keyCode == 13 || event.key == 13) {
         enviarMissatge();
-    }
-    if(event.keyCode == 38 || event.key == 38) {
+    } else if(event.keyCode == 38 || event.key == 38) {
         document.getElementById('text').value = lastMessage;
+    } else {
+        if(!typing) {
+            typing = true;
+            //TODO: enviar sala
+            socket.emit('typing', { typing : true,
+                         nom : nom
+            });
+            typeTimeout = setTimeout(function() {
+                typing = false;
+                //TODO: enviar sala
+                socket.emit('typing', { typing : false,
+                             nom : nom
+                });
+            }, 1000);
+        } else {            
+            clearTimeout(typeTimeout);
+            typeTimeout = setTimeout(function() {
+                typing = false;
+                //TODO: enviar sala
+                socket.emit('typing', { typing : false,
+                             nom : nom
+                });
+            }, 1000);
+        }
     }
 }
 
@@ -194,21 +223,45 @@ function enviarCodi() {
     if(text !== "" || tipus !== "") {
         socket.emit('msg', { msg : text,
                              nom : nom,
-                             tipus : tipus
+                             tipus : tipus,
+                             color : color
         });
         document.getElementById('codi-a-enviar').value = '';
     }
 }
 
-function imprimirMissatgeXat(text, nom, hora, color) {
-    document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:" + color + "\">" +
-                "<div class=\"panel-body missatge\">" +
-                    "<p class=\"autor\" style=\"color:" + color + "\"><b>" + nom + "</b></p>" +
-                    "<p class=\"text\">" + comprovarIcones(text) + "</p>" +
-                    "<p class=\"hora\">" + hora + "</p>" +
-                "</div>" +
-            "</div>";
-    document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight; 
+function imprimirMissatgeXat(text, nom, hora, color, tipus) {    
+    if(tipus === "text") {
+        document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:" + color + "\">" +
+            "<div class=\"panel-body missatge\">" +
+                "<p class=\"autor\" style=\"color:" + color + "\"><b>" + nom + "</b></p>" +
+                "<p class=\"text\">" + comprovarIcones(text) + "</p>" +
+                "<p class=\"hora\">" + hora + "</p>" +
+            "</div>" +
+        "</div>";
+        if(text.indexOf('max-width:calc') > -1) {
+            document.getElementsByTagName('img')[document.getElementsByTagName('img').length - 1 - 125].complete = function() {
+                document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
+            };
+        } else
+            document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
+    } else {
+        document.getElementById('missatges').innerHTML += "<div class=\"panel panel-default panel-missatge\" style=\"border-color:"+color+"\">" +
+            "<div class=\"panel-body missatge\">" +
+                "<p class=\"autor\" style=\"color:" + color + "\"><b>" + nom + "</b></p>" +
+                "<pre><code class=\"" + tipus + "\">" + text + "</code></pre>" +
+                "<p class=\"hora\">" + hora + "</p>" +
+            "</div>" +
+        "</div>";
+
+        setTimeout(function() {
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });            
+        }, 10);
+        
+        document.getElementById('missatges').scrollTop = document.getElementById('missatges').scrollHeight;
+    }
 }
 
 function enviarNotificacio(text,nom) {
@@ -240,6 +293,16 @@ function afegirIconaText(icona) {
     var fi = document.getElementById('text').value.substr(doGetCaretPosition(document.getElementById('text')),document.getElementById('text').length);
     document.getElementById('text').value = ini + icona + fi;
     document.getElementById('text').focus();
+}
+
+function clickUsuari(desti) {
+    var missatgePrompt = prompt("Que li vols enviar?");
+    socket.emit('msgPriv', { msg :missatgePrompt,
+                         nom : nom,
+                         color : color,
+                         tipus : "text",
+                         desti : desti
+    });
 }
 
 function doGetCaretPosition (oField) {

@@ -217,27 +217,12 @@ $(".pop-icones").popover({ trigger: "manual" , html: true, animation:false,
     }, 300);
 });
 
+console.log("jQUEEEEEEEEERY");
+
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); 
 });
 
-
-$("#paleta-colors").spectrum({
-    color: "#555", // Aquí es fica el color per defecte. Falta ficar el actual del user.
-    showPaletteOnly: true,
-    replacerClassName: 'form-control boto-paleta-fons',
-    change: function(color) {
-        $("#nou-nick").css('color', color),
-        $("#nou-nick").css('border-color', color)
-    },
-    palette: [
-        ["#A50000", "#FF0000","#FF4000","#FF8000","#80FF00","#40FF00","#00FF00",
-        "#00FF80","#00FFBF","#00FFFF","#00BFFF","#0080FF","#0040FF","#0000FF", "#4000FF", "#035462", "#5F7CFF",
-        "#8A60FF", "#33007F", "#FF75FA", "#5B0047","#FF3A57", "#E42B00", "#FF9200", "#BF9700", "#80B900", "#9CE000",
-        "#349E5B",
-        "#8000FF", "#740066", "#BF00FF", "#FF00FF", "#FF0080", "#FF0040", "#555", "#000000"]
-    ]
-});
 function configClick() {
     var actualPass=$('#actual-pass').val();
     if (actualPass === '') {
@@ -259,7 +244,10 @@ function configClick() {
         if(enviar.readyState == 4 && enviar.status == 200) {
             console.log(enviar.responseText);
             if(enviar.responseText.split(',')[0] === "true") {
-                nouMsgInfo('success', '<b>Enhorabona:</b> ' + enviar.responseText.split(',')[1]);            
+                nouMsgInfo('success', '<b>Enhorabona:</b> ' + enviar.responseText.split(',')[1]);
+                setTimeout(function() {
+                    location.reload(true);                    
+                }, 2000);
             } else {
                 nouMsgInfo('danger', enviar.responseText.split(',')[1]);
             }
